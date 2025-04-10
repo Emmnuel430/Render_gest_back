@@ -205,3 +205,14 @@ Route::get('generate_rappels', [RappelController::class, 'generateRappels']);
 // Définit une route GET pour l'endpoint '/rappels_recents'.
 // Lorsque cette route est appelée, elle exécute la fonction 'getRecentRappels' du RappelController.
 Route::get('rappels_recents', [RappelController::class, 'getRecentRappels']);
+
+
+// -----------------------------------------------
+// -----------------   Test   --------------------
+// -----------------------------------------------
+// Définit une route GET pour l'endpoint '/test'.
+// Lorsque cette route est appelée, elle retourne un message JSON indiquant que l'API est en ligne.
+// Cette route est utilisée pour vérifier si l'API fonctionne correctement.
+Route::get('/test', function () {
+    return response()->json(['message' => 'API en ligne 🎉']);
+});
