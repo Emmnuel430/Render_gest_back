@@ -16,9 +16,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/import-bd', function () {
-    $sql = File::get(database_path('import/import.sql')); // Assure-toi que le nom est correct ici
-    DB::unprepared($sql);
-    return '✅ Import terminé avec succès !';
-});
