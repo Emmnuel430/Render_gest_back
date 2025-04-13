@@ -216,15 +216,3 @@ Route::get('rappels_recents', [RappelController::class, 'getRecentRappels']);
 Route::get('/test', function () {
     return response()->json(['message' => 'API en ligne 🎉']);
 });
-
-
-Route::get('/import-bd', function () {
-    try {
-        $sql = File::get(database_path('import/import.sql'));
-        DB::unprepared($sql);
-        // yes
-        return response()->json(['message' => '✅ Import terminé avec succès !']);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
-});
