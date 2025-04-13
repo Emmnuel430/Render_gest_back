@@ -222,6 +222,7 @@ Route::get('/import-bd', function () {
     try {
         $sql = File::get(database_path('import/import.sql'));
         DB::unprepared($sql);
+        // yes
         return response()->json(['message' => '✅ Import terminé avec succès !']);
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()], 500);
