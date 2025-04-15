@@ -28,7 +28,7 @@ return new class extends Migration {
             $table->string('type_piece');
             $table->string('num_piece')->unique(); // Numéro de pièce unique
             $table->decimal('scolarite', 10, 2)->default(0); // Frais de scolarité
-            $table->decimal('montant_paye', 10, 2)->default(0)->after('scolarite'); // Ajoute la colonne après "scolarite"
+            $table->decimal('montant_paye', 10, 2)->default(0); // Ajoute la colonne après "scolarite"
             $table->text('motif_inscription')->nullable(); // Champ texte pour motif
             $table->timestamps();
 
