@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
 
 use App\Models\Etudiant;
 use App\Models\User;

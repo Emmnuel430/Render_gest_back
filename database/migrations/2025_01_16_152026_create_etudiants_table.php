@@ -30,6 +30,7 @@ return new class extends Migration {
             $table->decimal('scolarite', 10, 2)->default(0); // Frais de scolarité
             $table->decimal('montant_paye', 10, 2)->default(0); // Ajoute la colonne après "scolarite"
             $table->text('motif_inscription')->nullable(); // Champ texte pour motif
+            $table->text('categorie')->nullable(); // Champ texte pour catégorie
             $table->timestamps();
 
             // Ajout des contraintes de clé étrangère
