@@ -27,7 +27,7 @@ WORKDIR /var/www
 COPY . .
 
 # Installer les dépendances Laravel
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader --no-dev --no-scripts
 
 # Lancer les optimisations Laravel
 RUN php artisan config:clear
