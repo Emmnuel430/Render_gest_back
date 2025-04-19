@@ -33,7 +33,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true; // Activer les timestamps
 
     /**
      * Les attributs avec type spécifié.
