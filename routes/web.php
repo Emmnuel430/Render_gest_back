@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/reset-bd', function () {
+    Artisan::call('migrate:fresh --seed --force');
+    return 'Base de données réinitialisée avec succès 💣';
+});
+
