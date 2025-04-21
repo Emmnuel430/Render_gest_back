@@ -39,6 +39,7 @@ class MoniteurController extends Controller
 
             // Retourne la réponse JSON
             return response()->json([
+                'status' => 'success',
                 'message' => 'Moniteur ajouté avec succès',
                 'moniteur' => $moniteur,
             ], 201);
@@ -55,7 +56,16 @@ class MoniteurController extends Controller
     function listeMoniteur()
     {
         // Retourne tous les produits sous forme de collection
-        return Moniteur::all();
+        $moniteurs = Moniteur::all();
+        // Vérifie si la collection est vide
+        if ($moniteurs->isEmpty()) {
+            return response()->json(['status' => 'Aucun moniteur trouvé'], 404);
+        }
+        // Retourne la collection de moniteurs
+        return response()->json([
+            'status' => 'success',
+            'moniteurs' => $moniteurs,
+        ], 200);
     }
 
     // Fonction pour supprimer un moniteur par son ID
@@ -89,7 +99,7 @@ class MoniteurController extends Controller
                 'created_at' => now(),
             ]);
 
-            return response()->json(['status' => 'deleted'], 200);
+            return response()->json(['status' => 'deleted with success'], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -112,6 +122,7 @@ class MoniteurController extends Controller
 
             // Préparer la réponse avec les informations du moniteur et des étudiants
             return response()->json([
+                'status' => 'success',
                 'moniteur' => [
                     'nom' => $moniteur->nom,
                     'prenom' => $moniteur->prenom,
@@ -186,6 +197,7 @@ class MoniteurController extends Controller
 
             // Retourner la réponse JSON
             return response()->json([
+                'status' => 'success',
                 'message' => 'Moniteur mis à jour avec succès',
                 'moniteur' => $moniteur,
             ], 200);
@@ -203,8 +215,4 @@ class MoniteurController extends Controller
             ], 500);
         }
     }
-
-
-
-
 }

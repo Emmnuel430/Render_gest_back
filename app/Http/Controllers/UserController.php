@@ -45,7 +45,11 @@ class UserController extends Controller
         ]);
 
         // Retourne les données de l'utilisateur nouvellement créé (hors mot de passe) en tant que réponse HTTP.
-        return $user;
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Utilisateur créé avec succès',
+            'user' => $user,
+        ], 201);
     }
 
     // Méthode pour connexion
@@ -60,14 +64,28 @@ class UserController extends Controller
         }
 
         // Retourne les informations de l'utilisateur (sans le mot de passe).
-        return $user;
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+            'message' => 'Connexion réussie',
+        ], 200);
+
     }
 
     // Récuperer tous les Users
     function listeUser()
     {
         // Retourne tous les produits sous forme de collection
-        return User::all();
+        $users = User::all();
+        // Vérifie si la collection est vide
+        if ($users->isEmpty()) {
+            return response()->json(['status' => 'Aucun utilisateur trouvé'], 404);
+        }
+        // Retourne la collection d'utilisateurs
+        return response()->json([
+            'status' => 'success',
+            'users' => $users,
+        ], 200);
     }
 
     // Fonction pour supprimer un user par son ID
@@ -102,7 +120,7 @@ class UserController extends Controller
             ]);
 
             // Statut de suppression
-            return response()->json(['status' => 'deleted'], 200);
+            return response()->json(['status' => 'deleted with success'], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -120,7 +138,10 @@ class UserController extends Controller
             return response()->json(['error' => 'Utilisateur non trouvé.'], 404);
         }
         // Retourne l'user correspondant à l'ID donné
-        return $user;
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+        ], 200);
     }
 
     // M-à-j les données d'un user
@@ -198,6 +219,7 @@ class UserController extends Controller
 
 
         return response()->json([
+            'status' => 'success',
             'message' => 'Utilisateur mis à jour avec succès.',
             'user' => $user
         ], 200);

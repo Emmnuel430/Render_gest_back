@@ -40,6 +40,7 @@ class RappelController extends Controller
             ]);
 
             return response()->json([
+                'status' => 'success',
                 'message' => 'Rappel créé avec succès',
                 'rappel' => $rappel,
             ], 201);
@@ -94,6 +95,7 @@ class RappelController extends Controller
             }
 
             return response()->json([
+                'status' => 'success',
                 'message' => 'Rappel mis à jour avec succès',
                 'rappel' => $rappel,
             ], 200);
@@ -137,7 +139,7 @@ class RappelController extends Controller
                 'created_at' => now(),
             ]);
 
-            return response()->json(['message' => 'Rappel supprimé avec succès'], 200);
+            return response()->json(['status' => 'Rappel supprimé avec succès'], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
@@ -249,6 +251,7 @@ class RappelController extends Controller
             }
 
             return response()->json([
+                'status' => 'success',
                 'message' => 'Rappels générés avec succès.',
                 'rappels' => $rappels,
             ], 201);

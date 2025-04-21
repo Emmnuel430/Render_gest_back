@@ -78,6 +78,7 @@ class EtudiantController extends Controller
 
             // Retourne une réponse en cas de succès
             return response()->json([
+                'status' => 'success',
                 'message' => 'Étudiant enregistré avec succès !',
                 'etudiant' => $etudiant,
             ], 201);
@@ -96,7 +97,10 @@ class EtudiantController extends Controller
     {
         // Retourne tous les etudiants sous forme de collection
         $etudiants = Etudiant::with('progression')->get(); // Récupérer les étudiants avec leur progression
-        return response()->json($etudiants);
+        return response()->json([
+            'status' => 'success',
+            'etudiants' => $etudiants,
+        ], 200);
 
     }
 
@@ -112,6 +116,7 @@ class EtudiantController extends Controller
             }
 
             return response()->json([
+                'status' => 'success',
                 'etudiant' => $etudiant,
                 'progression' => $etudiant->progression, // Inclure la progression
                 'moniteur' => $etudiant->moniteur, // Inclure le moniteur
@@ -161,7 +166,9 @@ class EtudiantController extends Controller
                 'created_at' => now(),
             ]);
 
-            return response()->json(['status' => 'deleted'], 200);
+            return response()->json([
+                'status' => 'deleted with success'
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -254,7 +261,11 @@ class EtudiantController extends Controller
                 ]);
             }
 
-            return response()->json(['message' => 'Étudiant mis à jour avec succès.', 'etudiant' => $etudiant], 200);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Étudiant mis à jour avec succès.',
+                'etudiant' => $etudiant
+            ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['status' => 'error', 'message' => 'Étudiant introuvable.'], 404);
         } catch (Exception $e) {
@@ -268,7 +279,10 @@ class EtudiantController extends Controller
     {
         try {
             $etudiants = Etudiant::orderBy('created_at', 'desc')->take(10)->get();
-            return response()->json($etudiants, 200);
+            return response()->json([
+                'status' => 'success',
+                'etudiants' => $etudiants,
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

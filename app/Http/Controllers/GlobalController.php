@@ -20,7 +20,10 @@ class GlobalController extends Controller
             ->orderBy('date') // Trie les résultats par date
             ->get();
 
-        return response()->json($data); // Retourne les données au format JSON
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]); // Retourne les données au format JSON
     }
 
     // Classement des étudiants par étape de progression
@@ -32,7 +35,10 @@ class GlobalController extends Controller
             ->orderBy('etape') // Trie les résultats par étape
             ->get();
 
-        return response()->json($data); // Retourne les données au format JSON
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]); // Retourne les données au format JSON
     }
 
     // Répartition par catégorie de permis
@@ -43,7 +49,10 @@ class GlobalController extends Controller
             ->groupBy('categorie') // Regroupe les résultats par catégorie
             ->get();
 
-        return response()->json($data); // Retourne les données au format JSON
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]); // Retourne les données au format JSON
     }
 
     // Répartition par moniteur
@@ -55,7 +64,10 @@ class GlobalController extends Controller
             ->groupBy('idMoniteur') // Regroupe les résultats par moniteur
             ->get();
 
-        return response()->json($data); // Retourne les données au format JSON
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]); // Retourne les données au format JSON
     }
 
     // Répartition par réduction
@@ -66,7 +78,10 @@ class GlobalController extends Controller
             ->groupBy('reduction') // Regroupe les résultats par état de réduction
             ->get();
 
-        return response()->json($data); // Retourne les données au format JSON
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]); // Retourne les données au format JSON
     }
 
     // Totaux des entités principales
@@ -88,6 +103,7 @@ class GlobalController extends Controller
         })->get();
 
         return response()->json([
+            'status' => 'success',
             'totalEtudiants' => $totalEtudiants, // Retourne le total des étudiants
             'totalMoniteurs' => $totalMoniteurs, // Retourne le total des moniteurs
             'totalUsers' => $totalUsers, // Retourne le total des utilisateurs
