@@ -16,7 +16,7 @@ class UserFactory extends Factory
             'nom' => $this->faker->lastName(),
             'prenom' => $this->faker->firstName(),
             'pseudo' => $this->faker->userName(),
-            'password' => bcrypt('password'), // mot de passe par défaut
+            'password' => bcrypt('12345'), // mot de passe par défaut
             'role' => $this->faker->boolean(30), // 30% de chance que ce soit un admin (true)
         ];
     }

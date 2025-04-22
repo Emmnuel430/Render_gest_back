@@ -57,10 +57,7 @@ class MoniteurController extends Controller
     {
         // Retourne tous les produits sous forme de collection
         $moniteurs = Moniteur::all();
-        // Vérifie si la collection est vide
-        if ($moniteurs->isEmpty()) {
-            return response()->json(['status' => 'Aucun moniteur trouvé'], 404);
-        }
+
         // Retourne la collection de moniteurs
         return response()->json([
             'status' => 'success',
