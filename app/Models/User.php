@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * Les attributs assignables en masse.
@@ -44,8 +45,4 @@ class User extends Authenticatable
         'role' => 'boolean', // Cast du rôle en booléen
     ];
 
-    /* public function resultat()
-    {
-        return $this->hasMany(Resultat::class, 'idUser');
-    } */
 }

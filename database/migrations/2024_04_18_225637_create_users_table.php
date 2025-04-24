@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('password');
             $table->boolean('role')->default(false);
             $table->rememberToken();
+            $table->timestamps();
             // pas de timestamps car désactivés dans le modèle
             $table->timestamps();
         });

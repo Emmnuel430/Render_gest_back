@@ -12,8 +12,12 @@ use App\Http\Controllers\GlobalController; // Importation du contrôleur GlobalC
 use App\Http\Controllers\RappelController; // Importation du contrôleur RappelController
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    // Autres routes protégées
 });
 
 // -----------------------------------------------
@@ -26,6 +30,14 @@ Route::post('add_user', [UserController::class, 'addUser']);
 // Définit une route POST pour l'endpoint '/login'.
 // Lorsque cette route est appelée, elle exécute la fonction 'login' du UserController.
 Route::post('login', [UserController::class, 'login']);
+
+// Définit une route POST pour l'endpoint '/logout'.
+// Lorsque cette route est appelée, elle exécute la fonction suivante.
+Route::post('/logout', function (Request $request) {
+    $request->user()->currentAccessToken()->delete();
+    return response()->json(['message' => 'Déconnecté avec succès']);
+})->middleware('auth:sanctum');
+
 
 // Définit une route GET pour l'endpoint '/list'.
 // Lorsque cette route est appelée, elle exécute la fonction 'list' du UserController.

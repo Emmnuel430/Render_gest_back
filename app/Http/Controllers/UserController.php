@@ -63,11 +63,15 @@ class UserController extends Controller
             return response()->json(['error' => 'Pseudo ou mot de passe incorrect'], 401);
         }
 
+        // Création du token
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         // Retourne les informations de l'utilisateur (sans le mot de passe).
         return response()->json([
             'status' => 'success',
             'user' => $user,
-            'message' => 'Connexion réussie',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
         ], 200);
 
     }
