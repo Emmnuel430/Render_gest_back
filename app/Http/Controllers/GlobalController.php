@@ -92,6 +92,7 @@ class GlobalController extends Controller
         $totalMoniteurs = Moniteur::count(); // Compte le nombre total de moniteurs
         $totalUsers = User::count(); // Compte le nombre total d'utilisateurs
         // -----
+        $etudiantsSoldes = Etudiant::whereColumn('montant_paye', '>=', 'scolarite')->count();
         $totalMontantPaye = Etudiant::sum('montant_paye'); // Somme de tous les montants payés par les étudiants
         $etudiantsAuCode = Etudiant::whereHas('progression', function ($query) {
             $query->where('etape', 'cours_de_code') // Étape "code"
@@ -107,6 +108,7 @@ class GlobalController extends Controller
             'totalEtudiants' => $totalEtudiants, // Retourne le total des étudiants
             'totalMoniteurs' => $totalMoniteurs, // Retourne le total des moniteurs
             'totalUsers' => $totalUsers, // Retourne le total des utilisateurs
+            'etudiantsSoldes' => $etudiantsSoldes, // Retourne le nombre d'étudiants avec un solde positif
             'totalMontantPaye' => $totalMontantPaye, // Retourne la somme des montants payés
             'etudiantsAuCode' => $etudiantsAuCode->count(), // Retourne le nombre d'étudiants au code
             'etudiantsALaConduite' => $etudiantsALaConduite->count(), // Retourne le nombre d'étudiants à la conduite

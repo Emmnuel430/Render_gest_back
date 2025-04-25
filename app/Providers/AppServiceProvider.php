@@ -12,6 +12,8 @@ use App\Models\Progression;
 use App\Observers\RappelImpObserver;
 use App\Observers\ResultatObserver;
 use App\Observers\EtudiantObserver;
+use App\Observers\ProgressionObserver;
+// ----------
 
 
 class AppServiceProvider extends ServiceProvider
@@ -35,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Etudiant::observe(EtudiantObserver::class);
         Programmation::observe(RappelImpObserver::class);
-        Progression::observe(RappelImpObserver::class);
+        Progression::observe(ProgressionObserver::class);
         Resultat::observe(ResultatObserver::class);
 
     }

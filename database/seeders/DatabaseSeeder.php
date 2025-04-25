@@ -23,5 +23,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
         ]);
+
+
+        $this->call([
+            EtudiantSeeder::class,
+        ]);
     }
 }

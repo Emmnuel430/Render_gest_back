@@ -3,7 +3,6 @@ namespace App\Observers;
 
 use App\Models\RappelImp;
 use App\Models\Programmation;
-use App\Models\Progression;
 
 class RappelImpObserver
 {
@@ -29,15 +28,5 @@ class RappelImpObserver
             ->where('statut', 0)
             ->update(['statut' => 1]);
     }
-    // 🟢 Surveiller l’évolution de la progression
-    public function updated(Progression $progression)
-    {
-        // 5️⃣ Si l'étudiant atteint l'examen de conduite, clôturer le rappel de formation prolongée
-        if ($progression->etape === 'examen_de_conduite') {
-            RappelImp::where('idUser', $progression->etudiant->idUser)
-                ->where('type', 'formation')
-                ->where('statut', 0)
-                ->update(['statut' => 1]);
-        }
-    }
+
 }
