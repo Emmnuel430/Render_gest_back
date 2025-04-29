@@ -20,7 +20,7 @@ class LogController extends Controller
     public function latestLogs()
     {
         // Retourne les 5 derniers logs avec les informations des utilisateurs associés
-        $logs = Log::with('user')->latest()->take(5)->get();
+        $logs = Log::with('user')->latest()->take(6)->get();
         return response()->json([
             'status' => 'success',
             'logs' => $logs

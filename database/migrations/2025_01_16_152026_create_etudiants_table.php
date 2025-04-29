@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('nom');
             $table->string('prenom');
             $table->date('dateNaissance');
-            $table->string('lieuNaissance');
+            $table->string('lieuNaissance')->nullable();
             $table->string('commune');
             $table->string('num_telephone');
             $table->string('num_telephone_2')->nullable(); // Numéro secondaire optionnel

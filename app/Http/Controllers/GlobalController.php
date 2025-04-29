@@ -46,6 +46,8 @@ class GlobalController extends Controller
     public function repartitionParCategorie()
     {
         $data = Etudiant::select('categorie', DB::raw('COUNT(*) as count')) // Sélectionne la catégorie et le nombre d'étudiants
+            ->whereNotNull('categorie')       // Ignore les NULL
+            ->where('categorie', '<>', '')
             ->groupBy('categorie') // Regroupe les résultats par catégorie
             ->get();
 

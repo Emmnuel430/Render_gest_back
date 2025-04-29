@@ -19,7 +19,7 @@ class EtudiantObserver
         }
 
         // 🔹 Si l’étudiant paie tout, clôturer le rappel de paiement
-        if ($etudiant->montant_paye >= $etudiant->scolarite) {
+        if ($etudiant->montant_paye == $etudiant->scolarite) {
             RappelImp::where('idUser', $etudiant->idUser)
                 ->where('type', 'paiement')
                 ->where('statut', 0)

@@ -179,76 +179,81 @@ class RappelController extends Controller
         try {
             $rappels = [];
 
-            // Rappels pour les paiements (étudiants non soldés)
+            // Rappels pour les paiements
             $etudiantsNonSoldes = Etudiant::whereColumn('montant_paye', '<', 'scolarite')->get();
             foreach ($etudiantsNonSoldes as $etudiant) {
                 $rappels[] = RappelImp::updateOrCreate([
-                    'titre' => "Paiement en attente pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
-                    'description' => "L'étudiant(e) n'a pas encore soldé. Reste à payer: " . ($etudiant->scolarite - $etudiant->montant_paye) . " FCFA",
-                    'date_rappel' => null,
-                    'type' => 'paiement',
-                    'priorite' => 'élevée',
-                    'statut' => 0,
                     'idUser' => $etudiant->idUser,
-
+                    'type' => 'paiement',
+                    'statut' => 0,
+                    'titre' => "Paiement en attente pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
+                ], [
+                    'description' => "Reste à payer: " . ($etudiant->scolarite - $etudiant->montant_paye) . " FCFA",
+                    'date_rappel' => null,
+                    'priorite' => 'élevée',
                 ]);
             }
 
-            // Rappels pour les examens (programmations)
+            // Rappels pour les examens
             $examens = Programmation::where('date_prog', '>', now())->get();
             foreach ($examens as $examen) {
                 $rappels[] = RappelImp::updateOrCreate([
-                    'titre' => "Examen prévu le {$examen->date_prog}",
-                    'description' => "Un examen est programmé à cette date. Type: {$examen->type}",
-                    'date_rappel' => $examen->date_prog,
-                    'type' => 'examen',
-                    'priorite' => 'moyenne',
-                    'statut' => 0,
                     'idUser' => $examen->idUser,
+                    'type' => 'examen',
+                    'statut' => 0,
+                    'date_rappel' => $examen->date_prog, // Important ici
+                    'titre' => "Examen prévu le {$examen->date_prog}",
+                ], [
+                    'description' => "Un examen est programmé à cette date. Type: {$examen->type}",
+                    'priorite' => 'moyenne',
                 ]);
             }
 
-            // Rappels pour les absents (étudiants inactifs depuis 30 jours)
+            // Rappels pour les inactifs
             $etudiantsInactifs = Etudiant::where('updated_at', '<', now()->subDays(30))->get();
             foreach ($etudiantsInactifs as $etudiant) {
                 $rappels[] = RappelImp::updateOrCreate([
+                    'idUser' => $etudiant->idUser,
+                    'type' => 'inactivité',
+                    'statut' => 0,
                     'titre' => "Inactivité détectée pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
+                ], [
                     'description' => "Aucune mise à jour des données depuis plus de 30 jours.",
                     'date_rappel' => null,
-                    'type' => 'inactivité',
                     'priorite' => 'moyenne',
-                    'statut' => 0,
-                    'idUser' => $etudiant->idUser,
                 ]);
             }
 
-            // Rappels en cas de formation prolongée (étudiants inscrits depuis plus de 6 mois)
+            // Rappels pour formation prolongée
             $etudiantsInscritsLongtemps = Etudiant::whereDate('created_at', '<', now()->subMonths(6))->get();
             foreach ($etudiantsInscritsLongtemps as $etudiant) {
                 $rappels[] = RappelImp::updateOrCreate([
+                    'idUser' => $etudiant->idUser,
+                    'type' => 'formation',
+                    'statut' => 0,
                     'titre' => "Formation prolongée pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
+                ], [
                     'description' => "L'étudiant(e) est inscrit(e) depuis plus de 6 mois sans finaliser sa formation.",
                     'date_rappel' => null,
-                    'type' => 'formation',
                     'priorite' => 'élevée',
-                    'statut' => 0,
-                    'idUser' => $etudiant->idUser,
                 ]);
             }
 
-            // Rappels pour les résultats non rétirés
+            // Rappels pour résultats non retirés
             $resultatsNonRetires = Resultat::where('statut', 0)->get();
             foreach ($resultatsNonRetires as $resultat) {
                 $rappels[] = RappelImp::updateOrCreate([
+                    'idUser' => $resultat->idUser,
+                    'type' => 'résultat',
+                    'statut' => 0,
                     'titre' => "Résultat non retiré pour {$resultat->etudiant->nom} {$resultat->etudiant->prenom}",
+                ], [
                     'description' => "L'étudiant(e) doit récupérer son résultat.",
                     'date_rappel' => null,
-                    'type' => 'résultat',
                     'priorite' => 'moyenne',
-                    'statut' => 0,
-                    'idUser' => $resultat->idUser,
                 ]);
             }
+
 
             return response()->json([
                 'status' => 'success',
@@ -268,13 +273,22 @@ class RappelController extends Controller
     public function getRecentRappels()
     {
         try {
-            $recentImportantRappels = RappelImp::where('statut', 0)->orderBy('created_at', 'desc')->take(5)->get();
-            $recentRappels = Rappel::where('statut', 0)->orderBy('created_at', 'desc')->take(5)->get();
+            $recentImportantRappels = RappelImp::where('statut', 0)
+                ->orderByRaw("FIELD(priorite, 'élevée', 'moyenne', 'basse')")
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+
+            $recentRappels = Rappel::where('statut', 0)
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
 
             return response()->json([
                 'status' => 'success',
                 'recentImportantRappels' => $recentImportantRappels,
                 'recentRappels' => $recentRappels,
+                'lastRefresh' => now(), // ajoute l'heure de dernière récupération
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -284,4 +298,5 @@ class RappelController extends Controller
             ], 500);
         }
     }
+
 }

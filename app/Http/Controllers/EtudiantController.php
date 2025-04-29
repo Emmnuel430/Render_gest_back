@@ -167,7 +167,7 @@ class EtudiantController extends Controller
             ]);
 
             return response()->json([
-                'status' => 'deleted with success'
+                'status' => 'deleted'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -258,6 +258,7 @@ class EtudiantController extends Controller
                     'action' => 'update',
                     'table_concernee' => 'etudiants',
                     'details' => "Modification pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id}) " . implode(', ', $details),
+                    'created_at' => now(),
                 ]);
             }
 

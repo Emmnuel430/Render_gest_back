@@ -14,10 +14,15 @@ class Moniteur extends Model
 
     // Champs pouvant être remplis en masse
     protected $fillable = [
-        'nom',        // Nom du moniteur
-        'prenom',     // Prénom du moniteur
-        'specialite', // Spécialité du moniteur
+        'nom',
+        'prenom',
+        'specialite',
+        'num_telephone',
+        'num_telephone_2',
+        'email',
+        'commune',
     ];
+
 
     // Relation entre Moniteur et Etudiant (un moniteur peut avoir plusieurs étudiants)
     public function etudiant()

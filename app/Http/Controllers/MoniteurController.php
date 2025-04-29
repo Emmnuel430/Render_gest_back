@@ -96,7 +96,7 @@ class MoniteurController extends Controller
                 'created_at' => now(),
             ]);
 
-            return response()->json(['status' => 'deleted with success'], 200);
+            return response()->json(['status' => 'deleted'], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -120,11 +120,7 @@ class MoniteurController extends Controller
             // Préparer la réponse avec les informations du moniteur et des étudiants
             return response()->json([
                 'status' => 'success',
-                'moniteur' => [
-                    'nom' => $moniteur->nom,
-                    'prenom' => $moniteur->prenom,
-                    'specialite' => $moniteur->specialite,
-                ],
+                'moniteur' => $moniteur,
                 'etudiants' => $moniteur->etudiant->map(function ($etudiant) {
                     return [
                         'nom' => $etudiant->nom,

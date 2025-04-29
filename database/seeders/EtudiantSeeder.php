@@ -16,7 +16,7 @@ class EtudiantSeeder extends Seeder
     {
         $faker = Faker::create('fr_FR');
 
-        foreach (range(1, 20) as $i) {
+        foreach (range(1, 10) as $i) {
             $motif = $faker->randomElement(['permis', 'recyclage']);
 
             if ($motif === 'permis') {
@@ -84,6 +84,8 @@ class EtudiantSeeder extends Seeder
         $categorySet = collect($categories);
 
         switch (true) {
+            case $categorySet->count() === 1 && $categorySet->contains('A'):
+                return 30000;
             case $categorySet->count() === 2 && $categorySet->contains('A') && $categorySet->contains('B'):
                 return 100000;
             case $categorySet->count() === 4 && $categorySet->contains('B') && $categorySet->contains('C') && $categorySet->contains('D') && $categorySet->contains('E'):
