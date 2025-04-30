@@ -276,18 +276,16 @@ class RappelController extends Controller
             $recentImportantRappels = RappelImp::where('statut', 0)
                 ->orderByRaw("FIELD(priorite, 'élevée', 'moyenne', 'basse')")
                 ->orderBy('created_at', 'desc')
-                ->take(5)
                 ->get();
 
             $recentRappels = Rappel::where('statut', 0)
                 ->orderBy('created_at', 'desc')
-                ->take(5)
                 ->get();
 
             return response()->json([
                 'status' => 'success',
-                'recentImportantRappels' => $recentImportantRappels,
-                'recentRappels' => $recentRappels,
+                'recentImportantRappels' => $recentImportantRappels->count(),
+                'recentRappels' => $recentRappels->count(),
                 'lastRefresh' => now(), // ajoute l'heure de dernière récupération
             ], 200);
         } catch (\Exception $e) {

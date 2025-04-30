@@ -9,7 +9,7 @@ use App\Models\Programmation;
 use App\Models\Resultat;
 use App\Models\Progression;
 // ----------
-use App\Observers\RappelImpObserver;
+use App\Observers\ProgrammationObserver;
 use App\Observers\ResultatObserver;
 use App\Observers\EtudiantObserver;
 use App\Observers\ProgressionObserver;
@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Etudiant::observe(EtudiantObserver::class);
-        Programmation::observe(RappelImpObserver::class);
+        Programmation::observe(ProgrammationObserver::class);
         Progression::observe(ProgressionObserver::class);
         Resultat::observe(ResultatObserver::class);
 

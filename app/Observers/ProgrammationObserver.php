@@ -4,7 +4,7 @@ namespace App\Observers;
 use App\Models\RappelImp;
 use App\Models\Programmation;
 
-class RappelImpObserver
+class ProgrammationObserver
 {
 
     // 🟢 Surveiller l’ajout d’un examen
