@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Programmation;
+use \App\Models\Progression;
 use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +32,9 @@ class ProgrammationController extends Controller
             'type' => 'required|in:code,conduite', // Le type doit être soit "code" soit "conduite"
             'fichier_pdf' => 'required|file|mimes:pdf|max:8192', // Le fichier doit être un PDF de taille maximale 8 Mo
             'idUser' => 'required|exists:users,id', // L'utilisateur doit exister dans la table "users"
-            'nom_fichier' => 'required|string|max:255' // Le nom du fichier est obligatoire et doit être une chaîne de caractères
+            'nom_fichier' => 'required|string|max:255', // Le nom du fichier est obligatoire et doit être une chaîne de caractères
+            'etudiants' => 'required|array', // Les étudiants doivent être fournis sous forme de tableau
+            'etudiants.*' => 'exists:etudiant,id', // Chaque étudiant doit exister dans la table "etudiants"
         ]);
 
         // Stockage du fichier PDF avec un nom personnalisé
@@ -61,6 +64,22 @@ class ProgrammationController extends Controller
             'idUser' => $validated['idUser'], // ID de l'utilisateur associé
             'created_at' => now(), // Date de création
         ]);
+
+        // ✅ RÉCUPÉRATION DES ÉTUDIANTS
+        $etudiantsIds = $validated['etudiants'];
+
+        // ✅ DÉTERMINER LA NOUVELLE ÉTAPE
+        $nouvelleEtape = $validated['type'] === 'code'
+            ? 'programmé_pour_le_code'
+            : 'programmé_pour_la_conduite';
+
+        // ✅ MISE À JOUR DES PROGRESSIONS
+        foreach ($etudiantsIds as $idEtudiant) {
+            $progression = Progression::where('idEtudiant', $idEtudiant)->first();
+            if ($progression) {
+                $progression->update(['etape' => $nouvelleEtape]);
+            }
+        }
 
         // Enregistrement d'un log pour suivre l'action
         Log::create([

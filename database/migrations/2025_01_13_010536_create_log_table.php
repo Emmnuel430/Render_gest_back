@@ -15,12 +15,12 @@ return new class extends Migration {
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idUser'); // Colonne ID utilisateur
+            $table->unsignedBigInteger('idUser')->nullable(); // Colonne ID utilisateur
             $table->string('action');
             $table->text('details')->nullable();
             $table->timestamps();
 
-            $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade'); // Clé étrangère
+            $table->foreign('idUser')->references('id')->on('users')->onDelete('set null'); // Clé étrangère
         });
     }
 
