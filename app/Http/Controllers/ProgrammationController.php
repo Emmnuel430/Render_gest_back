@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Programmation;
 use \App\Models\Progression;
 use App\Models\Log;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -81,9 +82,14 @@ class ProgrammationController extends Controller
             }
         }
 
+        $user = User::find($validated['idUser']);
         // Enregistrement d'un log pour suivre l'action
         Log::create([
             'idUser' => $validated['idUser'], // ID de l'utilisateur ayant effectué l'action
+            'user_nom' => $user->nom,
+            'user_prenom' => $user->prenom,
+            'user_pseudo' => $user->pseudo,
+            'user_doc' => $user->created_at,
             'action' => 'add', // Action effectuée (ajout)
             'table_concernee' => 'programmations', // Table concernée par l'action
             'details' => "Programmation ajoutée : {$validated['date_prog']} ({$validated['type']}).", // Détails de l'action

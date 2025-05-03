@@ -22,8 +22,17 @@ class RappelImp extends Model
         'type',           // Type de rappel (ex: leçon, paiement, examen, etc.)
         'priorite',       // Niveau de priorité (ex: basse, moyenne, élevée)
         'statut',         // Statut du rappel (0 = en attente, 1 = terminé)
-        'idUser', // ID de l'utilisateur associé au rappel
+        'model_id',        // ID de l’élément concerné (étudiant, etc.)
+        'model_type',      // Classe du modèle concerné (App\Models\Etudiant, etc.)
     ];
+
+    public function model()
+    {
+        // Relation polymorphe pour récupérer le modèle associé au rappel
+        // Par exemple, si le rappel est associé à un étudiant, il renverra l'instance de l'étudiant
+        // Si le rappel est associé à un autre modèle, il renverra cet autre modèle
+        return $this->morphTo();
+    }
 
     /**
      * Relation avec le modèle User (utilisateur).

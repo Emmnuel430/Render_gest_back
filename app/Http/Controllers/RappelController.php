@@ -9,6 +9,7 @@ use App\Models\Log;
 use App\Models\Etudiant;
 use App\Models\Resultat;
 use App\Models\Programmation;
+use App\Models\User;
 
 class RappelController extends Controller
 {
@@ -30,9 +31,14 @@ class RappelController extends Controller
             // Création du rappel
             $rappel = Rappel::create($req->all());
 
+            $user = User::find($req->input('idUser'));
             // Enregistrement du log
             Log::create([
                 'idUser' => $req->input('idUser'),
+                'user_nom' => $user->nom,
+                'user_prenom' => $user->prenom,
+                'user_pseudo' => $user->pseudo,
+                'user_doc' => $user->created_at,
                 'action' => 'add',
                 'table_concernee' => 'rappels',
                 'details' => "Rappel créé : {$rappel->titre} (ID: {$rappel->id})",
@@ -84,9 +90,14 @@ class RappelController extends Controller
                 }
             }
 
+            $user = User::find($req->input('idUser'));
             if (!empty($details)) {
                 Log::create([
                     'idUser' => $req->input('idUser'),
+                    'user_nom' => $user->nom,
+                    'user_prenom' => $user->prenom,
+                    'user_pseudo' => $user->pseudo,
+                    'user_doc' => $user->created_at,
                     'action' => 'update',
                     'table_concernee' => 'rappels',
                     'details' => "Rappel modifié (ID: {$rappel->id}): " . implode(', ', $details),
@@ -130,9 +141,14 @@ class RappelController extends Controller
             $rappelInfo = "{$rappel->titre} (ID: {$rappel->id}) Statut: {$statut}";
             $rappel->delete();
 
+            $user = User::find($userId);
             // Log de suppression
             Log::create([
                 'idUser' => $userId,
+                'user_nom' => $user->nom,
+                'user_prenom' => $user->prenom,
+                'user_pseudo' => $user->pseudo,
+                'user_doc' => $user->created_at,
                 'action' => 'delete',
                 'table_concernee' => 'rappels',
                 'details' => "Rappel supprimé : {$rappelInfo}",
@@ -183,7 +199,8 @@ class RappelController extends Controller
             $etudiantsNonSoldes = Etudiant::whereColumn('montant_paye', '<', 'scolarite')->get();
             foreach ($etudiantsNonSoldes as $etudiant) {
                 $rappels[] = RappelImp::updateOrCreate([
-                    'idUser' => $etudiant->idUser,
+                    'model_id' => $etudiant->id,
+                    'model_type' => Etudiant::class,
                     'type' => 'paiement',
                     'statut' => 0,
                     'titre' => "Paiement en attente pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
@@ -198,7 +215,8 @@ class RappelController extends Controller
             $examens = Programmation::where('date_prog', '>', now())->get();
             foreach ($examens as $examen) {
                 $rappels[] = RappelImp::updateOrCreate([
-                    'idUser' => $examen->idUser,
+                    'model_id' => $examen->id,
+                    'model_type' => Programmation::class,
                     'type' => 'examen',
                     'statut' => 0,
                     'date_rappel' => $examen->date_prog, // Important ici
@@ -213,7 +231,8 @@ class RappelController extends Controller
             $etudiantsInactifs = Etudiant::where('updated_at', '<', now()->subDays(30))->get();
             foreach ($etudiantsInactifs as $etudiant) {
                 $rappels[] = RappelImp::updateOrCreate([
-                    'idUser' => $etudiant->idUser,
+                    'model_id' => $etudiant->id,
+                    'model_type' => Etudiant::class,
                     'type' => 'inactivité',
                     'statut' => 0,
                     'titre' => "Inactivité détectée pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
@@ -228,7 +247,8 @@ class RappelController extends Controller
             $etudiantsInscritsLongtemps = Etudiant::whereDate('created_at', '<', now()->subMonths(6))->get();
             foreach ($etudiantsInscritsLongtemps as $etudiant) {
                 $rappels[] = RappelImp::updateOrCreate([
-                    'idUser' => $etudiant->idUser,
+                    'model_id' => $etudiant->id,
+                    'model_type' => Etudiant::class,
                     'type' => 'formation',
                     'statut' => 0,
                     'titre' => "Formation prolongée pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
@@ -243,7 +263,8 @@ class RappelController extends Controller
             $resultatsNonRetires = Resultat::where('statut', 0)->get();
             foreach ($resultatsNonRetires as $resultat) {
                 $rappels[] = RappelImp::updateOrCreate([
-                    'idUser' => $resultat->idUser,
+                    'model_id' => $resultat->id,
+                    'model_type' => Resultat::class,
                     'type' => 'résultat',
                     'statut' => 0,
                     'titre' => "Résultat non retiré pour {$resultat->etudiant->nom} {$resultat->etudiant->prenom}",

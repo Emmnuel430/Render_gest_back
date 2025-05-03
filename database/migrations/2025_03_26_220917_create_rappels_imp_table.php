@@ -20,7 +20,8 @@ return new class extends Migration {
             $table->string('type')->nullable(); // Type de rappel (ex: leçon, paiement, examen)
             $table->enum('priorite', ['basse', 'moyenne', 'élevée'])->default('basse'); // Niveau de priorité
             $table->tinyInteger('statut')->default(0); // Statut du rappel (0 = en attente, 1 = terminé)
-            $table->foreignId('idUser')->constrained('users')->onDelete('cascade'); // Clé étrangère vers la table users
+            $table->unsignedBigInteger('model_id'); // ID de l'objet concerné
+            $table->string('model_type');           // Type du modèle (ex: App\Models\Etudiant)
             $table->timestamps(); // Colonnes created_at et updated_at
         });
     }

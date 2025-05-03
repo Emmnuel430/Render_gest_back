@@ -61,13 +61,13 @@ class EtudiantSeeder extends Seeder
                 'created_at' => now(),
             ]);
 
-            Log::create([
+            /* Log::create([
                 'idUser' => 1,
                 'action' => 'add',
                 'table_concernee' => 'etudiants',
                 'details' => "Etudiant ajouté : {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
                 'created_at' => now(),
-            ]);
+            ]); */
         }
     }
 

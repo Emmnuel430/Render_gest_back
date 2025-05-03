@@ -10,7 +10,9 @@ class ResultatObserver
     {
         // 🔹 Fermer le rappel quand un étudiant récupère son résultat
         if ($resultat->statut == 1) {
-            RappelImp::where('idUser', $resultat->idUser)
+            RappelImp::where('model_id', $resultat->id)
+                ->where('model_type', Resultat::class)
+
                 ->where('type', 'résultat')
                 ->where('statut', 0)
                 ->update(['statut' => 1]);
@@ -20,7 +22,9 @@ class ResultatObserver
     public function deleted(Resultat $resultat)
     {
         // 🔹 Fermer le rappel quand un étudiant supprime son résultat
-        RappelImp::where('idUser', $resultat->idUser)
+        RappelImp::where('model_id', $resultat->id)
+            ->where('model_type', Resultat::class)
+
             ->where('type', 'résultat')
             ->where('statut', 0)
             ->update(['statut' => 1]);

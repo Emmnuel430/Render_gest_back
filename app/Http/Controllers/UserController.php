@@ -36,8 +36,13 @@ class UserController extends Controller
 
         // Enregistrement du log
         $adminId = $req->input('admin_id'); // L'ID de l'administrateur effectuant l'ajout
+        $userId = User::find($adminId);
         Log::create([
             'idUser' => $adminId, // L'utilisateur qui a ajouté
+            'user_nom' => $userId->nom,
+            'user_prenom' => $userId->prenom,
+            'user_pseudo' => $userId->pseudo,
+            'user_doc' => $userId->created_at,
             'action' => 'create',
             'table_concernee' => 'users',
             'details' => "Nouvel utilisateur ajouté : {$user->nom} {$user->prenom} (ID: {$user->id}, " . ($user->role == 1 ? 'Admin' : 'Staff') . ")",
@@ -114,9 +119,14 @@ class UserController extends Controller
             // Suppression de l'utilisateur
             $user->delete();
 
+            $user_id = User::find($userId);
             // Enregistrement du log
             Log::create([
                 'idUser' => $userId,
+                'user_nom' => $user_id->nom,
+                'user_prenom' => $user_id->prenom,
+                'user_pseudo' => $user_id->pseudo,
+                'user_doc' => $user_id->created_at,
                 'action' => 'delete',
                 'table_concernee' => 'users',
                 'details' => "Utilisateur supprimé : {$userName} (ID: {$id})",
@@ -212,8 +222,13 @@ class UserController extends Controller
 
         // Enregistrer le log
         if (count($modifications) > 0) {
+            $user_id = User::find($userId);
             Log::create([
                 'idUser' => $userId,
+                'user_nom' => $user_id->nom,
+                'user_prenom' => $user_id->prenom,
+                'user_pseudo' => $user_id->pseudo,
+                'user_doc' => $user_id->created_at,
                 'action' => 'maj',
                 'table_concernee' => 'users',
                 'details' => "Changements effectués (ID: {$user->id}): " . $modificationsDetails,

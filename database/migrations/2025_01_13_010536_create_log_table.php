@@ -16,7 +16,13 @@ return new class extends Migration {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('idUser')->nullable(); // Colonne ID utilisateur
+            $table->string('user_nom')->nullable(); // Copie du nom de l’utilisateur
+            $table->string('user_prenom')->nullable(); // Copie du prénom de l’utilisateur
+            $table->string('user_pseudo')->nullable(); // Ou email, selon l'usage
+            $table->dateTime('user_doc')->nullable(); // Date de création de l'utilisateur
+
             $table->string('action');
+            $table->string('table_concernee');
             $table->text('details')->nullable();
             $table->timestamps();
 

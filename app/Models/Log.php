@@ -12,14 +12,18 @@ class Log extends Model
     // Définition des attributs pouvant être assignés en masse
     protected $fillable = [
         'idUser',           // Identifiant de l'utilisateur associé au log
+        'user_nom',        // Nom de l'utilisateur (copie du nom)
+        'user_prenom',      // Prénom de l'utilisateur (copie du prénom)
+        'user_pseudo',      // Pseudo ou email de l'utilisateur (selon l'usage)
+        'user_doc',         // Date de création de l'utilisateur
         'action',           // Action effectuée (exemple : création, suppression)
         'table_concernee',  // Nom de la table concernée par l'action
         'details',          // Détails supplémentaires sur l'action
         'created_at',       // Date et heure de création du log
     ];
 
-    // Désactive la gestion automatique des timestamps par Eloquent
-    public $timestamps = false;
+    // Active la gestion automatique des timestamps par Eloquent
+    public $timestamps = true;
 
     // Définition de la relation entre le log et l'utilisateur
     public function user()

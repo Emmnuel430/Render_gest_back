@@ -16,8 +16,10 @@ class ProgressionObserver
     public function updated(Progression $progression)
     {
         // Si l'étudiant atteint l'examen de conduite, clôturer le rappel de formation prolongée
-        if ($progression->etape === 'examen_de_conduite') {
-            RappelImp::where('idUser', $progression->etudiant->idUser)
+        if ($progression->etape === 'programmé_pour_la_conduite') {
+            RappelImp::where('model_id', $progression->id)
+                ->where('model_type', Progression::class)
+
                 ->where('type', 'formation')
                 ->where('statut', 0)
                 ->update(['statut' => 1]);

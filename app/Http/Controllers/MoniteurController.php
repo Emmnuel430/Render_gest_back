@@ -28,9 +28,14 @@ class MoniteurController extends Controller
                 'specialite' => $req->input('specialite'),
             ]);
 
+            $user = User::find($req->input('user_id'));
             // Enregistre un log avec l'action "add"
             Log::create([
                 'idUser' => $req->input('user_id'),
+                'user_nom' => $user->nom,
+                'user_prenom' => $user->prenom,
+                'user_pseudo' => $user->pseudo,
+                'user_doc' => $user->created_at,
                 'action' => 'add',
                 'table_concernee' => 'moniteurs',
                 'details' => "Moniteur(trice) ajouté(e) : {$moniteur->nom} {$moniteur->prenom} (ID: {$moniteur->id})",
@@ -87,9 +92,14 @@ class MoniteurController extends Controller
             // Supprime le moniteur
             $moniteur->delete();
 
+            $user = User::find($userId);
             // Enregistre un log avec l'action "delete"
             Log::create([
                 'idUser' => $userId,
+                'user_nom' => $user->nom,
+                'user_prenom' => $user->prenom,
+                'user_pseudo' => $user->pseudo,
+                'user_doc' => $user->created_at,
                 'action' => 'delete',
                 'table_concernee' => 'moniteurs',
                 'details' => "Moniteur(trice) supprimé(e) : {$moniteurInfo} (ID: {$id})",
@@ -178,9 +188,14 @@ class MoniteurController extends Controller
                 // Transformer les détails en une chaîne lisible
                 $detailsString = implode(', ', $details);
 
+                $user = User::find($req->input('user_id'));
                 // Enregistrer un log détaillé
                 Log::create([
                     'idUser' => $req->input('user_id'),
+                    'user_nom' => $user->nom,
+                    'user_prenom' => $user->prenom,
+                    'user_pseudo' => $user->pseudo,
+                    'user_doc' => $user->created_at,
                     'action' => 'update',
                     'table_concernee' => 'moniteurs',
                     'details' => "Moniteur(trice) modifié(e) (ID: moni-{$moniteur->id}): {$detailsString}",

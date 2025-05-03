@@ -52,9 +52,14 @@ class ResultatController extends Controller
         // Création du résultat
         $resultat = Resultat::create($validated);
 
+        $user = User::find($validated['idUser']);
         // Enregistrement du log
         Log::create([
             'idUser' => $validated['idUser'],
+            'user_nom' => $user->nom,
+            'user_prenom' => $user->prenom,
+            'user_pseudo' => $user->pseudo,
+            'user_doc' => $user->created_at,
             'action' => 'add',
             'table_concernee' => 'resultats',
             'details' => "Résultat ajouté pour l'étudiant ID: {$validated['idEtudiant']}, type: {$validated['libelle']}.",
@@ -126,9 +131,14 @@ class ResultatController extends Controller
             $resultat->update($updateData);
         }
 
+        $user = User::find($validated['idUser']);
         // Enregistrement du log
         Log::create([
             'idUser' => $validated['idUser'],
+            'user_nom' => $user->nom,
+            'user_prenom' => $user->prenom,
+            'user_pseudo' => $user->pseudo,
+            'user_doc' => $user->created_at,
             'action' => 'update',
             'table_concernee' => 'resultats',
             'details' => "Résultat mis à jour pour l'étudiant ID: {$resultat->idEtudiant}.",
@@ -161,9 +171,14 @@ class ResultatController extends Controller
             return response()->json(['status' => 'error', 'message' => 'ID utilisateur invalide.'], 400);
         }
 
+        $user = User::find($userId);
         // Enregistrement du log avant suppression
         Log::create([
             'idUser' => $userId,
+            'user_nom' => $user->nom,
+            'user_prenom' => $user->prenom,
+            'user_pseudo' => $user->pseudo,
+            'user_doc' => $user->created_at,
             'action' => 'delete',
             'table_concernee' => 'resultats',
             'details' => "Résultat supprimé pour l'étudiant ID: {$resultat->idEtudiant}.",

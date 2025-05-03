@@ -67,9 +67,15 @@ class EtudiantController extends Controller
                 'created_at' => now(),
             ]);
 
+
+            $user = User::find($req->input('idUser'));
             // Enregistre un log avec l'action "add"
             Log::create([
                 'idUser' => $req->input('idUser'),
+                'user_nom' => $user->nom,
+                'user_prenom' => $user->prenom,
+                'user_pseudo' => $user->pseudo,
+                'user_doc' => $user->created_at,
                 'action' => 'add',
                 'table_concernee' => 'etudiants',
                 'details' => "Etudiant ajouté : {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id})",
@@ -157,9 +163,14 @@ class EtudiantController extends Controller
             // Supprime l'étudiant
             $etudiant->delete();
 
+            $user = User::find($userId);
             // Enregistre un log avec l'action "delete"
             Log::create([
                 'idUser' => $userId,
+                'user_nom' => $user->nom,
+                'user_prenom' => $user->prenom,
+                'user_pseudo' => $user->pseudo,
+                'user_doc' => $user->created_at,
                 'action' => 'delete',
                 'table_concernee' => 'etudiants',
                 'details' => "Étudiant supprimé : {$etudiantInfo}",
@@ -251,10 +262,15 @@ class EtudiantController extends Controller
                 }
             }
 
+            $user = User::find($req->input('user_id'));
             // Enregistrement du log si des modifications ont été effectuées
             if (!empty($details)) {
                 Log::create([
                     'idUser' => $req->input('user_id'),
+                    'user_nom' => $user->nom,
+                    'user_prenom' => $user->prenom,
+                    'user_pseudo' => $user->pseudo,
+                    'user_doc' => $user->created_at,
                     'action' => 'update',
                     'table_concernee' => 'etudiants',
                     'details' => "Modification pour {$etudiant->nom} {$etudiant->prenom} (ID: {$etudiant->id}) " . implode(', ', $details),
