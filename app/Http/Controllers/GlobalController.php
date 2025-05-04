@@ -94,15 +94,17 @@ class GlobalController extends Controller
         $totalMoniteurs = Moniteur::count(); // Compte le nombre total de moniteurs
         $totalUsers = User::count(); // Compte le nombre total d'utilisateurs
         // -----
-        $etudiantsSoldes = Etudiant::whereColumn('montant_paye', '>=', 'scolarite')->count();
+        $etudiantsSoldes = Etudiant::whereColumn('montant_paye', '>=', 'scolarite')->count(); // Nombres d'etudiants soldé
         $totalMontantPaye = Etudiant::sum('montant_paye'); // Somme de tous les montants payés par les étudiants
         $etudiantsAuCode = Etudiant::whereHas('progression', function ($query) {
             $query->where('etape', 'cours_de_code') // Étape "code"
-                ->orWhere('etape', 'examen_de_code'); // Étape "examen_code"
+                ->orWhere('etape', 'examen_de_code') // Étape "examen_code"
+                ->orWhere('etape', 'programmé_pour_le_code'); // Étape "programmé_pour_le_code"
         })->get();
         $etudiantsALaConduite = Etudiant::whereHas('progression', function ($query) {
             $query->where('etape', 'cours_de_conduite') // Étape "conduite"
-                ->orWhere('etape', 'examen_de_conduite'); // Étape "examen_conduite"
+                ->orWhere('etape', 'examen_de_conduite') // Étape "examen_conduite"
+                ->orWhere('etape', 'programmé_pour_la_conduite'); // Étape "programmé_pour_la_conduite"
         })->get();
 
         return response()->json([
@@ -110,7 +112,7 @@ class GlobalController extends Controller
             'totalEtudiants' => $totalEtudiants, // Retourne le total des étudiants
             'totalMoniteurs' => $totalMoniteurs, // Retourne le total des moniteurs
             'totalUsers' => $totalUsers, // Retourne le total des utilisateurs
-            'etudiantsSoldes' => $etudiantsSoldes, // Retourne le nombre d'étudiants avec un solde positif
+            'etudiantsSoldes' => $etudiantsSoldes, // Retourne le nombre d'étudiants soldé
             'totalMontantPaye' => $totalMontantPaye, // Retourne la somme des montants payés
             'etudiantsAuCode' => $etudiantsAuCode->count(), // Retourne le nombre d'étudiants au code
             'etudiantsALaConduite' => $etudiantsALaConduite->count(), // Retourne le nombre d'étudiants à la conduite

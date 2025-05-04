@@ -33,7 +33,7 @@ class EtudiantController extends Controller
             'scolarite' => 'required|numeric|min:0',
             'motifInscription' => 'required|string|max:255',
             'categorie' => 'nullable|array', // S'assurer que c'est un tableau
-            'categorie.*' => 'in:A,B,C,D,E', // S'assurer que chaque élément est valide
+            'categorie.*' => 'in:A,B,C,D,E,AB,BCDE,ABCDE,CDE', // S'assurer que chaque élément est valide
             'montant_paye' => 'required|numeric|min:0' // Nouveau champ
 
         ]);

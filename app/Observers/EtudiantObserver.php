@@ -20,6 +20,16 @@ class EtudiantObserver
                 ->update(['statut' => 1]);
         }
 
+        // 🔹 Si l'étudiant a un moniteur, clôturer le rappel d'affectation
+        if ($etudiant->idMoniteur) {
+            RappelImp::where('model_id', $etudiant->id)
+                ->where('model_type', Etudiant::class)
+
+                ->where('type', 'affectation')
+                ->where('statut', 0)
+                ->update(['statut' => 1]);
+        }
+
         // 🔹 Si l’étudiant paie tout, clôturer le rappel de paiement
         if ($etudiant->montant_paye == $etudiant->scolarite) {
             RappelImp::where('model_id', $etudiant->id)

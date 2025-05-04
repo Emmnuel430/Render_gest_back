@@ -192,6 +192,11 @@ class RappelController extends Controller
         RappelImp::whereDate('date_rappel', '=', now()->toDateString())
             ->where('statut', 0)
             ->update(['statut' => 1]);
+
+        $rappelActifs = RappelImp::where('statut', 0)
+            ->orderByRaw("FIELD(priorite, 'élevée', 'moyenne', 'basse')")
+            ->orderBy('created_at', 'desc')
+            ->get(); // Inclure les données utilisateur
         try {
             $rappels = [];
 
@@ -280,6 +285,7 @@ class RappelController extends Controller
                 'status' => 'success',
                 'message' => 'Rappels générés avec succès.',
                 'rappels' => $rappels,
+                'rappelActifs' => $rappelActifs,
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
