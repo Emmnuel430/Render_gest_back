@@ -194,7 +194,6 @@ class RappelController extends Controller
             ->update(['statut' => 1]);
 
         $rappelActifs = RappelImp::where('statut', 0)
-            ->orderByRaw("FIELD(priorite, 'élevée', 'moyenne', 'basse')")
             ->orderBy('created_at', 'desc')
             ->get(); // Inclure les données utilisateur
         try {
@@ -301,7 +300,6 @@ class RappelController extends Controller
     {
         try {
             $recentImportantRappels = RappelImp::where('statut', 0)
-                ->orderByRaw("FIELD(priorite, 'élevée', 'moyenne', 'basse')")
                 ->orderBy('created_at', 'desc')
                 ->get();
 

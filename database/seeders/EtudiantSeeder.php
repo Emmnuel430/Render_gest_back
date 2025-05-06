@@ -37,7 +37,7 @@ class EtudiantSeeder extends Seeder
 
             $etudiant = Etudiant::create([
                 'idMoniteur' => null,
-                'idUser' => 1,
+                'idUser' => 4,
                 'nom' => $faker->lastName,
                 'prenom' => $faker->firstName,
                 'dateNaissance' => Carbon::now()->subYears(rand(17, 30))->format('Y-m-d'),
