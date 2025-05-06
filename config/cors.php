@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://gest-front.vercel.app/'],
+    'allowed_origins' => ['https://gest-front.vercel.app'],
 
     'allowed_origins_patterns' => [],
 
