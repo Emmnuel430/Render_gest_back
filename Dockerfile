@@ -25,7 +25,7 @@ WORKDIR /var/www
 COPY . .
 
 # ✅ Installer les dépendances Laravel après avoir copié tous les fichiers (y compris artisan)
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
 # Permissions correctes
 RUN chmod -R 755 /var/www && chown -R www-data:www-data /var/www
